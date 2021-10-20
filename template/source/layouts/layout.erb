@@ -1,7 +1,14 @@
+<% slug = current_page.path.split('/')[0] %>
+<% if slug == "index.html" %>
+    <% page_index = 0 %>
+<% else %>
+    <% page_index = data.content.pages.index{ |h| h[:slug] == slug } %>
+<% end %>
+
 <!doctype html>
 <html>
   <head>
-    <title><%= data.content.pages.first.seoTitle %></title>
+    <title><%= data.content.pages.first.seoTitle %><% if data.content.pages[page_index].seoTitle != data.content.pages.first.seoTitle %> | <%= data.content.pages[page_index].seoTitle %><% end %></title>
     <meta name='description' content='<%= data.content.pages.first.seoDescription || data.content.pages.first.dek %>' />
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -19,18 +26,18 @@
         <meta property='article:modified_time' content='<%= DateTime.parse(data.content.entry.lastPublishedAt).iso8601 %>' />
     <% end %>
 
-    <meta itemprop="description" content="<%= data.content.pages.first.seoDescription || data.content.pages.first.dek %>">
-    <meta itemprop="image" content="<%= data.content.pages[0].socialImage ? data.content.pages[0].socialImage.croppedSrc : '' %>">
+    <meta itemprop="description" content="<%= data.content.pages[page_index].socialDescription || data.content.pages.first.dek %>">
+    <meta itemprop="image" content="<%= data.content.pages[page_index].socialImage ? data.content.pages[0].socialImage.croppedSrc : '' %>">
 
     <meta name="apple-mobile-web-app-title" content="<%= data.content.community.name_short %>">
     <meta property="article:publisher" content="<%= data.content.community.facebookURL %>">
-    <meta property="og:description" content="<%= data.content.pages[0].socialDescription %>">
+    <meta property="og:description" content="<%= data.content.pages[page_index].socialDescription %>">
 
-    <meta property="og:image" content="<%= data.content.pages[0].socialImage ? data.content.pages[0].socialImage.openGraphCroppedSrc : '' %>">
+    <meta property="og:image" content="<%= data.content.pages[page_index].socialImage.src ? data.content.pages[page_index].socialImage.openGraphCroppedSrc : '' %>">
     <meta property="og:image:height" content="630">
     <meta property="og:image:width" content="1200">
     <meta property="og:site_name" content="<%= data.content.community.name %> ">
-    <meta property="og:title" content="<%= data.content.pages[0].socialTitle %>">
+    <meta property="og:title" content="<%= data.content.pages[page_index].socialTitle %>">
     <meta property="og:type" content="article">
     <meta property="og:url" content="<%= data.content.entry.url %>">
 
@@ -39,9 +46,9 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="<%= data.content.entry.url %>">
-    <meta name="twitter:title" content="<%= data.content.pages[0].socialTitle %>">
-    <meta name="twitter:description" content="<%= data.content.pages[0].socialDescription %>">
-    <meta name="twitter:image:src" content="<%= data.content.pages[0].socialImage ? data.content.pages[0].socialImage.twitterCroppedSrc : '' %>">
+    <meta name="twitter:title" content="<%= data.content.pages[page_index].socialTitle %>">
+    <meta name="twitter:description" content="<%= data.content.pages[page_index].socialDescription %>">
+    <meta name="twitter:image:src" content="<%= data.content.pages[page_index].socialImage.src ? data.content.pages[page_index].socialImage.twitterCroppedSrc : '' %>">
     <meta name="twitter:image:width" content="1200" />
     <meta name="twitter:image:height" content="600" />
     <meta name="twitter:site" content="<%= data.content.community.twitterScreenName %>">
@@ -73,7 +80,7 @@
     <%= javascript_include_tag 'site' %>
     <script src='https://www.googletagservices.com/tag/js/gpt.js' async></script>
     <script src='https://c.amazon-adsystem.com/aax2/apstag.js' async></script>
-    <script src='<%= data.content.community.concertLibraryUrl %>'></script>
+    <script src='<%= data.content.community.concertLibraryUrl %>' async></script>
     <%= partial('layouts/_analytics') %>
   </head>
   <body>
