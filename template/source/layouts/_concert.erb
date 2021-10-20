@@ -1,12 +1,22 @@
 <script>
+
+  if (!window.ConcertAds) {
+    window.addEventListener('concertAdsReady', installConcertAds);
+  } else {
+    installConcertAds();
+  }
+
+  function installConcertAds() {
     let concertAds = new ConcertAds({
-      slug: '<%= data.content.entry.frontend.adUnitSlug %>',
-      dfpVariables: {
-        entry_id: ['<%= data.content.entryId %>'],
-        keywords: "<%= data.content.title.gsub('"', '') %>"
-      }
-    });
-    concertAds.loadRemoteConfig('<%= data.content.community.concertConfigUrl %>').then(() => {
-      concertAds.install();
-    });
-  </script>
+    slug: '<%= data.content.entry.frontend.adUnitSlug %>',
+    dfpVariables: {
+      entry_id: ['<%= data.content.entryId %>'],
+      keywords: "<%= data.content.title.gsub('"', '') %>"
+    }
+  });
+  concertAds.loadRemoteConfig('<%= data.content.community.concertConfigUrl %>').then(() => {
+    concertAds.install();
+  });
+  }
+    
+</script>
